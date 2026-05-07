@@ -1,6 +1,6 @@
 {
-  "name": "standard-v3",
-  "version": "0.3.0",
+  "name": "standard-v5-payments",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

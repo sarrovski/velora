@@ -1,7 +1,16 @@
-import { sellers, tools } from "./data";
+export function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
 
-export function getTool(slug: string) { return tools.find((tool) => tool.slug === slug); }
-export function getSeller(slug: string) { return sellers.find((seller) => seller.slug === slug); }
-export function getGame(slug: string) { return tools.filter((tool) => tool.gameSlug === slug); }
-export function formatInt(value: number) { return new Intl.NumberFormat("en-US", { notation: value > 9999 ? "compact" : "standard" }).format(value); }
-export function organicTools() { return [...tools].filter((tool) => tool.status === "Published").sort((a,b) => (b.rating * 20 + b.reviews/10 + b.trustScore) - (a.rating * 20 + a.reviews/10 + a.trustScore)); }
+export function riskTone(value: string) {
+  if (["Low", "Working", "Verified", "Published", "Active", "Official Provider"].includes(value)) return "green";
+  if (["Medium", "Updating", "Pending Review", "Under Review", "Paused"].includes(value)) return "amber";
+  if (["High", "Not Working", "Restricted", "Suspended", "Irreversible"].includes(value)) return "red";
+  return "default";
+}
+
+export function scoreTone(score: number) {
+  if (score >= 88) return "green";
+  if (score >= 72) return "amber";
+  return "red";
+}

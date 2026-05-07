@@ -1,29 +1,23 @@
-# Standard v3
+# Standard v5 — Payments + Resellers
 
-Standard is a trusted gaming tools discovery platform.
+Hostable frontend MVP for Standard.
 
-This version is frontend-only and hostable on Vercel without Prisma, database, auth, Stripe, or environment variables.
+## Included
+- Reseller buy options
+- Accepted payment methods
+- Payment-risk labels
+- `/payments` page
+- Rankings filters by payment method
+- Tool page with available sellers/resellers
+- Seller page payment profile
+- Dashboard reseller offers
+- Admin payment risk center
 
-## Routes
-
-- `/`
-- `/rankings`
-- `/games/valorant`
-- `/tools/phantomx-tracker`
-- `/sellers/devstudio`
-- `/pricing`
-- `/dashboard`
-- `/admin`
-- `/trust`
-
-## Run
-
+## Commands
 ```bash
 npm install
 npm run build
 npm run dev
 ```
 
-## Notes
-
-The dataset is original mock data. It is inspired by marketplace mechanics such as trust, bumps, pinned posts, seller status, reports, and moderation queues, but no external listings are copied.
+No Prisma, no database, no `.env` required.
