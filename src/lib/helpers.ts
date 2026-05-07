@@ -1,16 +1,14 @@
-export function cx(...classes: Array<string | false | null | undefined>) {
+import { listings } from "./real-listings";
+
+export function getListing(slug: string) {
+  return listings.find((listing) => listing.slug === slug);
+}
+
+export function getListingsByGame(game?: string) {
+  if (!game || game === "All") return listings;
+  return listings.filter((listing) => listing.game === game);
+}
+
+export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
-}
-
-export function riskTone(value: string) {
-  if (["Low", "Working", "Verified", "Published", "Active", "Official Provider"].includes(value)) return "green";
-  if (["Medium", "Updating", "Pending Review", "Under Review", "Paused"].includes(value)) return "amber";
-  if (["High", "Not Working", "Restricted", "Suspended", "Irreversible"].includes(value)) return "red";
-  return "default";
-}
-
-export function scoreTone(score: number) {
-  if (score >= 88) return "green";
-  if (score >= 72) return "amber";
-  return "red";
 }
