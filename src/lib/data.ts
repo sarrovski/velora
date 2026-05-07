@@ -1,7 +1,50 @@
 export type ToolStatus = "Working" | "Updating" | "Not Working";
-export type PlatformStatus = "Published" | "Pending Review" | "Draft" | "Rejected" | "Suspended";
+export type PublicationStatus = "Published" | "Pending Review" | "Draft" | "Rejected" | "Suspended";
+export type ReviewStatus = "Published" | "Removed";
+export type AppealStatus = "None" | "Pending Appeal" | "Appeal Approved" | "Appeal Denied";
 
-export const games = ["CS2", "Valorant", "Fortnite", "Apex Legends", "Call of Duty"];
+export const games = ["Valorant", "CS2", "Fortnite", "Apex Legends", "Call of Duty"];
+
+export const featureOptions = [
+  "Match analytics",
+  "Agent performance",
+  "Round history",
+  "Rank tracking",
+  "Overlay HUD",
+  "Crosshair sync",
+  "Map awareness",
+  "Strategy notes",
+  "Team comms",
+  "Utility lineups",
+  "Aim training",
+  "Patch tracking",
+];
+
+export const sellers = [
+  {
+    slug: "devstudio",
+    name: "DevStudio",
+    verified: true,
+    plan: "Pro",
+    productLimit: 10,
+    boostLimit: 5,
+    trustScore: 96,
+    description:
+      "DevStudio builds polished analytics, overlay, and utility tools for competitive players who want reliable products, clear status, and transparent reviews.",
+    joinedAt: "March 2026",
+  },
+  {
+    slug: "aimforge-labs",
+    name: "AimForge Labs",
+    verified: false,
+    plan: "Starter",
+    productLimit: 5,
+    boostLimit: 1,
+    trustScore: 72,
+    description: "Aim trainers and mechanics tools for competitive FPS players.",
+    joinedAt: "May 2026",
+  },
+];
 
 export const tools = [
   {
@@ -11,18 +54,21 @@ export const tools = [
     category: "Stats & Insights",
     seller: "DevStudio",
     sellerSlug: "devstudio",
-    verified: true,
-    platformStatus: "Published" as PlatformStatus,
+    publicationStatus: "Published" as PublicationStatus,
     toolStatus: "Working" as ToolStatus,
+    showToolStatus: true,
     sponsored: true,
+    verified: true,
+    rankScore: 94.7,
     rating: 4.9,
     reviews: 326,
     clicks: 1320,
-    rank: "#1",
-    description: "Performance analytics and match insights for competitive Valorant players.",
-    longDescription: "PhantomX Tracker helps competitive players understand round history, agent performance, team impact, and ranking progression through a clean analytics dashboard.",
-    features: ["Match analytics", "Agent performance", "Round history", "Rank tracking"],
+    views: 28400,
     lastUpdated: "May 23, 2026",
+    description: "Performance analytics, match insights, and round history for competitive Valorant players.",
+    features: ["Match analytics", "Agent performance", "Round history", "Rank tracking"],
+    pricing: "Freemium",
+    websiteUrl: "https://example.com",
   },
   {
     slug: "shadow-overlay",
@@ -31,18 +77,21 @@ export const tools = [
     category: "Overlays",
     seller: "DevStudio",
     sellerSlug: "devstudio",
-    verified: true,
-    platformStatus: "Pending Review" as PlatformStatus,
+    publicationStatus: "Pending Review" as PublicationStatus,
     toolStatus: "Updating" as ToolStatus,
+    showToolStatus: true,
     sponsored: false,
+    verified: true,
+    rankScore: 72.1,
     rating: 4.4,
     reviews: 84,
     clicks: 412,
-    rank: "Pending",
-    description: "A clean in-game overlay for CS2 players who want better visibility and utility context.",
-    longDescription: "Shadow Overlay gives CS2 players a polished HUD layer with crosshair sync, map awareness, and contextual utility information.",
-    features: ["Overlay HUD", "Crosshair sync", "Map awareness"],
+    views: 6840,
     lastUpdated: "May 21, 2026",
+    description: "A clean in-game overlay for CS2 players who want better visibility and utility context.",
+    features: ["Overlay HUD", "Crosshair sync", "Map awareness", "Patch tracking"],
+    pricing: "Paid",
+    websiteUrl: "https://example.com",
   },
   {
     slug: "stratpad-extension",
@@ -51,41 +100,115 @@ export const tools = [
     category: "Utility",
     seller: "DevStudio",
     sellerSlug: "devstudio",
-    verified: true,
-    platformStatus: "Draft" as PlatformStatus,
+    publicationStatus: "Draft" as PublicationStatus,
     toolStatus: "Not Working" as ToolStatus,
+    showToolStatus: false,
     sponsored: false,
+    verified: true,
+    rankScore: 0,
     rating: 0,
     reviews: 0,
     clicks: 0,
-    rank: "Draft",
-    description: "Strategy notes, team comms, and utility lineups for Fortnite teams.",
-    longDescription: "StratPad Extension helps Fortnite teams organize strategies, comms, and utility notes before tournaments and scrims.",
-    features: ["Strategy notes", "Team comms", "Utility lineups"],
+    views: 0,
     lastUpdated: "May 18, 2026",
+    description: "Strategy notes, team comms, and utility lineups for Fortnite teams.",
+    features: ["Strategy notes", "Team comms", "Utility lineups"],
+    pricing: "Freemium",
+    websiteUrl: "https://example.com",
+  },
+  {
+    slug: "aimforge-pro",
+    name: "AimForge Pro",
+    game: "Apex Legends",
+    category: "Aim Training",
+    seller: "AimForge Labs",
+    sellerSlug: "aimforge-labs",
+    publicationStatus: "Published" as PublicationStatus,
+    toolStatus: "Working" as ToolStatus,
+    showToolStatus: true,
+    sponsored: false,
+    verified: false,
+    rankScore: 81.4,
+    rating: 4.6,
+    reviews: 118,
+    clicks: 905,
+    views: 11200,
+    lastUpdated: "May 19, 2026",
+    description: "Aim routines and mechanics training for FPS players who want measurable progress.",
+    features: ["Aim training", "Rank tracking", "Patch tracking"],
+    pricing: "Paid",
+    websiteUrl: "https://example.com",
   },
 ];
 
+export const publicTools = tools.filter((tool) => tool.publicationStatus === "Published");
+
 export const reviews = [
-  { toolSlug: "phantomx-tracker", user: "Vortex", title: "Clean, fast, and reliable", rating: 5, body: "The stats feel accurate and the UI is simple to understand.", appealStatus: "None" },
-  { toolSlug: "phantomx-tracker", user: "SentinelMain", title: "Good tool but setup was confusing", rating: 4, body: "Useful once installed. Setup instructions could be better.", appealStatus: "Pending Appeal" },
-  { toolSlug: "shadow-overlay", user: "Hexa", title: "Nice overlay design", rating: 4, body: "Overlay is clean. Waiting for the next update before using it full time.", appealStatus: "None" },
+  {
+    id: "r1",
+    toolSlug: "phantomx-tracker",
+    user: "Vortex",
+    title: "Clean, fast, and reliable",
+    rating: 5,
+    body: "The stats feel accurate and the UI is simple to understand.",
+    status: "Published" as ReviewStatus,
+    appealStatus: "None" as AppealStatus,
+  },
+  {
+    id: "r2",
+    toolSlug: "phantomx-tracker",
+    user: "SentinelMain",
+    title: "Good tool but setup was confusing",
+    rating: 4,
+    body: "Useful once installed. Setup instructions could be better.",
+    status: "Published" as ReviewStatus,
+    appealStatus: "Pending Appeal" as AppealStatus,
+  },
+  {
+    id: "r3",
+    toolSlug: "shadow-overlay",
+    user: "Hexa",
+    title: "Nice overlay design",
+    rating: 4,
+    body: "Overlay is clean. Waiting for the next update before using it full time.",
+    status: "Published" as ReviewStatus,
+    appealStatus: "None" as AppealStatus,
+  },
+];
+
+export const boostPackages = [
+  { name: "Starter Boost", price: "$19", duration: "3 days", placement: "Lower sponsored block" },
+  { name: "Standard Boost", price: "$49", duration: "7 days", placement: "Game rankings sponsored block" },
+  { name: "Premium Boost", price: "$129", duration: "14 days", placement: "Top sponsored slot + homepage rotation" },
 ];
 
 export const plans = [
-  { name: "Starter", price: "$29", products: 5, boosts: 1, appeals: 1, analytics: "Basic analytics", description: "For new sellers testing Velora." },
-  { name: "Pro", price: "$79", products: 10, boosts: 5, appeals: 3, analytics: "Advanced analytics", description: "For serious sellers with multiple products.", recommended: true },
-  { name: "Big Seller", price: "$199", products: 30, boosts: 15, appeals: 10, analytics: "Pro analytics", description: "For larger sellers with a full catalog." },
+  { name: "Starter", price: "$29", productLimit: 5, boosts: 1, appeals: 1, analytics: "Basic analytics", highlighted: false },
+  { name: "Pro", price: "$79", productLimit: 10, boosts: 5, appeals: 3, analytics: "Advanced analytics", highlighted: true },
+  { name: "Big Seller", price: "$199", productLimit: 30, boosts: 15, appeals: 10, analytics: "Pro analytics", highlighted: false },
 ];
 
-export const boosts = [
-  { product: "PhantomX Tracker", status: "Active", package: "Standard Boost", spend: "$49", clicks: "912", ends: "8 days left" },
-  { product: "Shadow Overlay", status: "Paused", package: "Starter Boost", spend: "$19", clicks: "104", ends: "Paused" },
-];
-
-export const auditLogs = [
-  "Admin approved PhantomX Tracker",
-  "Boost campaign activated for PhantomX Tracker",
-  "Review appeal created by DevStudio",
-  "Shadow Overlay submitted for review",
-];
+export const analytics = {
+  productViews: 38640,
+  outboundClicks: 2184,
+  ctr: "5.7%",
+  rankMovement: "+2",
+  boostSpend: "$49",
+  boostClicks: 912,
+  organicClicks: 1272,
+  timeline: [
+    { day: "Mon", views: 3200, clicks: 172 },
+    { day: "Tue", views: 3800, clicks: 205 },
+    { day: "Wed", views: 4100, clicks: 248 },
+    { day: "Thu", views: 5200, clicks: 301 },
+    { day: "Fri", views: 6100, clicks: 386 },
+    { day: "Sat", views: 6800, clicks: 432 },
+    { day: "Sun", views: 5440, clicks: 340 },
+  ],
+  sources: [
+    { name: "Game ranking pages", share: 47 },
+    { name: "Seller page", share: 21 },
+    { name: "Boost placements", share: 24 },
+    { name: "Search", share: 8 },
+  ],
+};
