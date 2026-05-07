@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Velora | Trusted Gaming Tool Rankings",
-  description: "Compare gaming tools by features, reviews, tool status, seller trust, and organic rankings.",
+  description: "Compare gaming tools by features, reviews, tool status, seller trust, and fair rankings.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
