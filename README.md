@@ -1,40 +1,29 @@
-# Velora MVP Complete
+# Standard v3
 
-Hostable frontend MVP for Velora, a gaming tools discovery/ranking platform.
+Standard is a trusted gaming tools discovery platform.
 
-## Included pages
+This version is frontend-only and hostable on Vercel without Prisma, database, auth, Stripe, or environment variables.
 
-- `/` Landing page
-- `/rankings` Public rankings with game/feature filters
-- `/tools/phantomx-tracker` Tool page
-- `/sellers/devstudio` Seller page
-- `/pricing` Seller plans
-- `/dashboard` Seller dashboard with products, builder, boosts, reviews, analytics, billing, settings
-- `/admin` Admin control center with sellers, product moderation, review appeals, boosts, plans, audit log
+## Routes
 
-## Stack
+- `/`
+- `/rankings`
+- `/games/valorant`
+- `/tools/phantomx-tracker`
+- `/sellers/devstudio`
+- `/pricing`
+- `/dashboard`
+- `/admin`
+- `/trust`
 
-- Next.js 14
-- React 18
-- TypeScript
-- Tailwind CSS 3
-- Mock data only, no database
-- No Prisma
-- No environment variables
-
-## Run locally
+## Run
 
 ```bash
 npm install
+npm run build
 npm run dev
 ```
 
-## Build
+## Notes
 
-```bash
-npm run build
-```
-
-## Deploy
-
-Push this folder to GitHub and import it into Vercel.
+The dataset is original mock data. It is inspired by marketplace mechanics such as trust, bumps, pinned posts, seller status, reports, and moderation queues, but no external listings are copied.

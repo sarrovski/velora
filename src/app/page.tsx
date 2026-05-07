@@ -1,58 +1,29 @@
 import Link from "next/link";
-import { PublicNav, PageShell } from "@/components/layout/Nav";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { games } from "@/lib/data";
-
-function FeatureCard({ icon, title, text }: { icon: string; title: string; text: string }) {
-  return (
-    <Card className="p-6 text-left">
-      <div className="flex items-start gap-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-purple-400/20 bg-purple-500/15 text-2xl">{icon}</div>
-        <div>
-          <h3 className="font-bold text-white">{title}</h3>
-          <p className="mt-1 text-sm leading-6 text-slate-400">{text}</p>
-        </div>
-      </div>
-    </Card>
-  );
-}
+import { Nav } from "@/components/nav";
+import { Badge, ButtonLink, Card, Metric, SectionTitle } from "@/components/ui";
+import { games, tools } from "@/lib/data";
+import { organicTools } from "@/lib/helpers";
+import { ToolCard } from "@/components/tool-card";
 
 export default function Home() {
+  const topTools = organicTools().slice(0, 3);
   return (
-    <PageShell>
-      <PublicNav />
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-12 text-center">
-        <div className="mx-auto max-w-4xl">
-          <Badge tone="purple">Trusted gaming software discovery</Badge>
-          <h1 className="mt-6 text-5xl font-black leading-[1.04] tracking-tight md:text-7xl">
-            Find the <span className="bg-gradient-to-r from-purple-400 to-cyan-300 bg-clip-text text-transparent">best tools</span><br />for every game.
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-400">
-            Compare features, reviews, tool status, seller trust, and rankings without the noise.
-          </p>
-          <div className="mx-auto mt-8 flex max-w-2xl items-center gap-3 rounded-2xl border border-purple-400/30 bg-slate-950/70 p-2 shadow-2xl shadow-purple-500/10 backdrop-blur">
-            <div className="flex flex-1 items-center gap-3 px-4 text-left text-slate-500"><span>⌕</span><span>Search tools, games, or features...</span></div>
-            <Button href="/rankings">Search</Button>
-          </div>
-          <div className="mt-5 flex flex-wrap justify-center gap-3">
-            {games.map((game) => (
-              <Link key={game} href={`/rankings?game=${encodeURIComponent(game)}`} className="rounded-full border border-white/10 bg-white/[0.035] px-5 py-2 text-sm text-slate-300 transition hover:border-purple-400/50 hover:text-white">{game}</Link>
-            ))}
-          </div>
-        </div>
-        <section className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
-          <FeatureCard icon="🏆" title="Organic rankings" text="Rankings are powered by trust, reviews, freshness, and community signals." />
-          <FeatureCard icon="🧩" title="Feature comparison" text="Users compare tools by what they actually do, not just ratings." />
-          <FeatureCard icon="⚡" title="Transparent boosts" text="Sellers can sponsor visibility, but boosts never buy rank." />
+    <main className="relative min-h-screen overflow-hidden bg-[#070812] px-6 py-8 text-white">
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(139,92,246,0.18),transparent_30%),radial-gradient(circle_at_0%_42%,rgba(34,211,238,0.10),transparent_28%)]" />
+      <div className="relative mx-auto max-w-7xl">
+        <Nav />
+        <section className="mx-auto max-w-4xl py-20 text-center">
+          <Badge>Trusted gaming tools marketplace</Badge>
+          <h1 className="mt-6 text-5xl font-black leading-[1.04] tracking-tight md:text-7xl">Find the <span className="bg-gradient-to-r from-purple-400 to-cyan-300 bg-clip-text text-transparent">standard</span><br />for every game.</h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-400">Compare tools by game, features, seller trust, reviews, tool status, bumps, and sponsored visibility — without confusing paid placement for organic rank.</p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><ButtonLink href="/rankings">Explore Rankings</ButtonLink><ButtonLink href="/dashboard" variant="secondary">Open Seller Dashboard</ButtonLink></div>
         </section>
-        <section className="mx-auto mt-12 grid max-w-5xl gap-4 rounded-3xl border border-white/10 bg-white/[0.035] p-6 text-left md:grid-cols-4">
-          {[["5.6K+", "Tools listed"], ["24.8K+", "Verified reviews"], ["1.1K+", "Trusted sellers"], ["38+", "Games covered"]].map(([value,label]) => (
-            <div key={label}><div className="text-3xl font-black">{value}</div><div className="mt-1 text-sm text-slate-400">{label}</div></div>
-          ))}
+        <section className="grid gap-4 md:grid-cols-4"><Metric label="Tools tracked" value="50+" detail="Original mock dataset" /><Metric label="Trusted sellers" value="1.1K" detail="Verified + monitored" /><Metric label="Reviews" value="24.8K" detail="Appeals protected" /><Metric label="Boost rule" value="0" detail="Paid rank influence" /></section>
+        <section className="mt-12 grid gap-6 lg:grid-cols-[1fr_360px]">
+          <div className="space-y-4"><SectionTitle eyebrow="Top organic tools" title="Community-ranked tools" text="Sponsored tools can get visibility, but these cards are ranked by trust, reviews, freshness, and engagement." />{topTools.map((tool, index) => <ToolCard key={tool.slug} tool={tool} rank={index + 1} />)}</div>
+          <div className="space-y-4"><Card className="p-6"><h2 className="text-2xl font-black">Game hubs</h2><p className="mt-2 text-sm leading-6 text-slate-400">Users usually know the game first. Standard turns every game into a focused marketplace page.</p><div className="mt-5 grid gap-2">{games.slice(0,6).map(game => <Link key={game.slug} href={`/games/${game.slug}`} className="flex justify-between rounded-2xl border border-white/10 bg-slate-950/40 p-4 hover:border-purple-400/30"><span>{game.name}</span><span className="text-slate-500">{game.tools} tools</span></Link>)}</div></Card><Card className="p-6"><h2 className="text-2xl font-black">Marketplace mechanics</h2><div className="mt-4 space-y-3 text-sm text-slate-400"><p>✓ Pinned and bumped listings</p><p>✓ Seller trust and status</p><p>✓ Review appeals handled by admins</p><p>✓ Reports, restrictions, and audit logs</p></div></Card></div>
         </section>
-      </section>
-    </PageShell>
+      </div>
+    </main>
   );
 }
