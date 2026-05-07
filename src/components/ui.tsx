@@ -22,15 +22,15 @@ export function Nav() {
       </Link>
       <div className="hidden items-center gap-7 text-sm font-medium text-slate-300 md:flex">
         <Link href="/marketplace" className="hover:text-white">Marketplace</Link>
-        <Link href="/claim" className="hover:text-white">Claim</Link>
-        <Link href="/seller" className="hover:text-white">Seller Studio</Link>
+        <Link href="/account" className="hover:text-white">Account</Link>
+        <Link href="/dashboard" className="hover:text-white">Seller Studio</Link>
         <Link href="/admin" className="hover:text-white">Admin</Link>
       </div>
       <Link
-        href="/marketplace"
+        href="/login"
         className="rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 px-4 py-2.5 text-sm font-semibold shadow-lg shadow-purple-500/20"
       >
-        Explore
+        Login
       </Link>
     </nav>
   );
@@ -77,17 +77,27 @@ export function Badge({
   );
 }
 
-export function StatusBadge({ value }: { value: string }) {
-  const tone =
-    value === "Verified" || value === "Claimed"
-      ? "green"
-      : value === "Unclaimed" || value === "Claim Pending"
-      ? "amber"
-      : value === "Restricted" || value === "Hidden"
-      ? "red"
-      : "default";
-
-  return <Badge tone={tone}>{value}</Badge>;
+export function ButtonLink({
+  href,
+  children,
+  variant = "primary",
+}: {
+  href: string;
+  children: ReactNode;
+  variant?: "primary" | "secondary";
+}) {
+  return (
+    <Link
+      href={href}
+      className={
+        variant === "primary"
+          ? "inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/20"
+          : "inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white"
+      }
+    >
+      {children}
+    </Link>
+  );
 }
 
 export function SectionHeader({
@@ -105,5 +115,15 @@ export function SectionHeader({
       <h1 className="mt-3 text-4xl font-black tracking-tight md:text-6xl">{title}</h1>
       <p className="mt-4 max-w-3xl text-slate-400">{text}</p>
     </div>
+  );
+}
+
+export function MiniStat({ label, value, detail }: { label: string; value: string; detail?: string }) {
+  return (
+    <Card className="p-5">
+      <p className="text-sm text-slate-400">{label}</p>
+      <p className="mt-3 text-3xl font-black">{value}</p>
+      {detail && <p className="mt-1 text-xs text-slate-500">{detail}</p>}
+    </Card>
   );
 }

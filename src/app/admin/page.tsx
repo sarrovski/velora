@@ -1,5 +1,5 @@
-import { Card, Nav, SectionHeader, Shell, Badge } from "@/components/ui";
-import { claimRequests, listings, outreachScripts } from "@/lib/real-listings";
+import { Badge, Card, MiniStat, Nav, SectionHeader, Shell } from "@/components/ui";
+import { adminSignals, claimQueue, listings, resellerOffers } from "@/lib/data";
 
 export default function AdminPage() {
   return (
@@ -8,39 +8,39 @@ export default function AdminPage() {
       <section className="mx-auto max-w-7xl px-6 py-10">
         <SectionHeader
           eyebrow="Admin"
-          title="Verification and claim control"
-          text="Review unclaimed references, seller claims, payment methods, risk signals, and outreach scripts."
+          title="Control claims, sellers, resellers, and payments"
+          text="Admin reviews claim requests, seller subscriptions, risky payment profiles, reseller offers, and integrity signals."
         />
 
         <section className="mt-8 grid gap-4 md:grid-cols-4">
-          <Metric label="Unclaimed" value={String(listings.filter((l) => l.status === "Unclaimed").length)} detail="Need seller outreach" />
-          <Metric label="Claims" value={String(claimRequests.length)} detail="Waiting review" />
-          <Metric label="Payment risk" value="Pending" detail="Methods unverified" />
-          <Metric label="Hidden" value={String(listings.filter((l) => l.status === "Hidden").length)} detail="Restricted references" />
+          <MiniStat label="Open claims" value={String(claimQueue.length)} detail="Need review" />
+          <MiniStat label="Unclaimed listings" value={String(listings.filter((l) => l.claimStatus === "Unclaimed").length)} detail="Outreach targets" />
+          <MiniStat label="Reseller offers" value={String(resellerOffers.length)} detail="Payment profiles" />
+          <MiniStat label="Risk signals" value={String(adminSignals.length)} detail="Watchlist" />
         </section>
 
         <section className="mt-8 grid gap-6 xl:grid-cols-[1fr_0.9fr]">
           <Panel title="Claim requests">
             <div className="space-y-3">
-              {claimRequests.map((request) => (
+              {claimQueue.map((claim) => (
                 <Row
-                  key={request.id}
-                  title={request.listing}
-                  meta={`${request.type} • ${request.requester}`}
-                  right={<Badge tone="amber">{request.status}</Badge>}
+                  key={claim.listing}
+                  title={claim.listing}
+                  meta={`${claim.type} • ${claim.requester}`}
+                  right={<Badge tone="amber">{claim.status}</Badge>}
                 />
               ))}
             </div>
           </Panel>
 
-          <Panel title="Payment Risk Center">
+          <Panel title="Signal Center">
             <div className="space-y-3">
-              {listings.map((listing) => (
+              {adminSignals.map((signal) => (
                 <Row
-                  key={listing.slug}
-                  title={listing.publicName}
-                  meta={`Payment profile: ${listing.verifiedFacts.paymentMethods.length ? listing.verifiedFacts.paymentMethods.join(", ") : "Unverified"}`}
-                  right={<Badge tone={listing.integrity.paymentRisk === "Medium" ? "amber" : "default"}>{listing.integrity.paymentRisk}</Badge>}
+                  key={signal.title}
+                  title={signal.title}
+                  meta={signal.meta}
+                  right={<Badge tone={signal.risk === "High" ? "red" : "amber"}>{signal.risk}</Badge>}
                 />
               ))}
             </div>
@@ -48,7 +48,7 @@ export default function AdminPage() {
         </section>
 
         <section className="mt-6">
-          <Panel title="Unclaimed references">
+          <Panel title="Listing moderation">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[900px] text-left text-sm">
                 <thead className="border-b border-white/10 text-xs uppercase tracking-wide text-slate-500">
@@ -56,22 +56,22 @@ export default function AdminPage() {
                     <th className="px-4 py-3">Listing</th>
                     <th className="px-4 py-3">Seller</th>
                     <th className="px-4 py-3">Game</th>
-                    <th className="px-4 py-3">Source</th>
-                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Claim</th>
+                    <th className="px-4 py-3">Payments</th>
                     <th className="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {listings.map((listing) => (
                     <tr key={listing.slug} className="border-b border-white/5 last:border-0">
-                      <td className="px-4 py-4 font-semibold">{listing.publicName}</td>
-                      <td className="px-4 py-4 text-slate-400">{listing.publicSellerName}</td>
+                      <td className="px-4 py-4 font-semibold">{listing.name}</td>
+                      <td className="px-4 py-4 text-slate-400">{listing.seller}</td>
                       <td className="px-4 py-4 text-slate-400">{listing.game}</td>
-                      <td className="px-4 py-4 text-slate-400">{listing.sourceType}</td>
-                      <td className="px-4 py-4"><Badge tone="amber">{listing.status}</Badge></td>
+                      <td className="px-4 py-4"><Badge tone="amber">{listing.claimStatus}</Badge></td>
+                      <td className="px-4 py-4 text-slate-400">{listing.verifiedPayments.length || "Pending"}</td>
                       <td className="px-4 py-4 text-right">
                         <button className="rounded-lg border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300">
-                          Send outreach
+                          Review
                         </button>
                       </td>
                     </tr>
@@ -83,12 +83,27 @@ export default function AdminPage() {
         </section>
 
         <section className="mt-6">
-          <Panel title="Outreach scripts">
-            <div className="grid gap-4 md:grid-cols-3">
-              {outreachScripts.map((script) => (
-                <Card key={script.title} className="p-5">
-                  <h3 className="font-bold">{script.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-400">{script.body}</p>
+          <Panel title="Payment Risk Center">
+            <div className="grid gap-4 md:grid-cols-2">
+              {resellerOffers.map((offer) => (
+                <Card key={offer.tool} className="p-5">
+                  <div className="flex justify-between gap-4">
+                    <div>
+                      <h3 className="font-bold">{offer.reseller}</h3>
+                      <p className="mt-1 text-sm text-slate-500">{offer.tool}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {offer.payments.map((payment) => (
+                          <Badge key={payment} tone={payment === "Gift Cards" ? "red" : payment === "Crypto" ? "amber" : "default"}>
+                            {payment}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="text-right text-sm text-slate-400">
+                      <div>{offer.status}</div>
+                      <div className="mt-1 text-xs text-slate-500">{offer.disputes}</div>
+                    </div>
+                  </div>
                 </Card>
               ))}
             </div>
@@ -96,16 +111,6 @@ export default function AdminPage() {
         </section>
       </section>
     </Shell>
-  );
-}
-
-function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <Card className="p-5">
-      <div className="text-sm text-slate-400">{label}</div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
-      <div className="mt-1 text-xs text-slate-500">{detail}</div>
-    </Card>
   );
 }
 

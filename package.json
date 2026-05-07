@@ -1,6 +1,6 @@
 {
-  "name": "standard-real-listings",
-  "version": "0.7.0",
+  "name": "standard-v8-account-dashboard",
+  "version": "0.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
